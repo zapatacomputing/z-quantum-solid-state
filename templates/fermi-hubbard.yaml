@@ -1,0 +1,141 @@
+spec:
+  templates:
+  - name: get-exact-energy-density-for-1D-fermi-hubbard-model
+    parent: generic-task
+    inputs:
+      parameters:
+      - name: tunneling-energy 
+      - name: coulomb-interaction-energy
+      - name: length-of-chain 
+        default: None
+      - name: magnetic-field
+        default: 0
+      - name: command
+        value: python3 main_script.py
+      artifacts:
+      - name: main-script
+        path: /app/main_script.py
+        raw:
+          data: |
+            from zquantum.solid_state.fermi_hubbard import calculate_exact_density_of_energy_for_1D_fermi_hubbard
+            from zquantum.core.utils import ValueEstimate, save_value_estimate
+            energy_density = calculate_exact_density_of_energy_for_1D_fermi_hubbard(
+                                          tunneling_energy={{inputs.parameters.tunneling-energy}},
+                                          coulomb_interaction_energy={{inputs.parameters.coulomb-interaction-energy}},
+                                          length_of_chain={{inputs.parameters.length-of-chain}},
+                                          magnetic_field={{inputs.parameters.magnetic-field}})
+            
+            save_value_estimate(ValueEstimate(energy_density), "energy_density.json")
+    outputs:
+      artifacts: 
+      - name: energy_density
+        path: /app/energy_density.json
+
+
+  # Fermi-Hubbard Hamiltonian
+  - name: get-fermi-hubbard-hamiltonian
+    parent: generic-task
+    inputs:
+      parameters:
+      - name: x-dimension
+      - name: y-dimension
+      - name: tunneling
+      - name: coulomb
+      - name: chemical-potential
+        default: 0.0
+      - name: magnetic-field
+        default: 0.0
+      - name: periodic
+        default: 'True'
+      - name: spinless
+        default: 'False'
+      - name: particle-hole-symmetry
+        default: 'False'
+      - name: command
+        value: python3 main_script.py
+      artifacts:
+      - name: main-script
+        path: /app/main_script.py
+        raw:
+          data: |
+            from zquantum.solid_state.fermi_hubbard import get_fermi_hubbard_hamiltonian
+            from qeopenfermion import save_interaction_operator
+            hamiltonian = get_fermi_hubbard_hamiltonian(
+                              {{inputs.parameters.x-dimension}},
+                              {{inputs.parameters.y-dimension}},
+                              {{inputs.parameters.tunneling}},
+                              {{inputs.parameters.coulomb}},
+                              chemical_potential={{inputs.parameters.chemical-potential}},
+                              magnetic_field={{inputs.parameters.magnetic-field}},
+                              periodic = {{inputs.parameters.periodic}},
+                              spinless = {{inputs.parameters.spinless}},
+                              particle_hole_symmetry = {{inputs.parameters.particle-hole-symmetry}})
+            save_interaction_operator(hamiltonian, 'hamiltonian.json')
+    outputs:
+      artifacts:
+      - name: hamiltonian
+        path: /app/hamiltonian.json
+
+  # Fermi-Hubbard Ordering
+  - name: get-fermi-hubbard-ordering
+    parent: generic-task
+    inputs:
+      parameters:
+      - name: x-dimension
+      - name: y-dimension
+      - name: qpu-x-dimension
+      - name: qpu-y-dimension
+      - name: ordering-type
+        default: 'sycamore-horizontal'
+      - name: initial-x
+        default: 0
+      - name: initial-y
+        default: 0
+      - name: command
+        value: python3 main_script.py
+      artifacts:
+      - name: main-script
+        path: /app/main_script.py
+        raw:
+          data: |
+            from zquantum.solid_state.fermi_hubbard import get_fermi_hubbard_ordering
+            from zquantum.core.circuit import save_circuit_ordering
+
+            ordering = get_fermi_hubbard_ordering(
+                              {{inputs.parameters.x-dimension}},
+                              {{inputs.parameters.y-dimension}},
+                              {{inputs.parameters.qpu-x-dimension}},
+                              {{inputs.parameters.qpu-y-dimension}},
+                              ordering_type='{{inputs.parameters.ordering-type}}',
+                              initial_x={{inputs.parameters.initial-x}},
+                              initial_y={{inputs.parameters.initial-y}})
+
+            save_circuit_ordering(ordering, 'ordering.json')
+    outputs:
+      artifacts:
+      - name: ordering
+        path: /app/ordering.json
+
+
+# get number operator
+  - name: get-number-operator
+    parent: generic-task
+    inputs:
+      parameters:
+      - name: n-qubits
+      - name: n-particles
+        default: None
+      - name: command
+        value: python3 main_script.py
+      artifacts:
+      - name: main-script
+        path: /app/main_script.py
+        raw:
+          data: |
+            from zmachine.core.fermion import get_fermion_number_operator, save_interaction_operator
+            number_op = get_fermion_number_operator({{inputs.parameters.n-qubits}}, {{inputs.parameters.n-particles}})
+            save_interaction_operator(number_op, 'number-op.json')
+    outputs:
+      artifacts:
+      - name: number-op
+        path: /app/number-op.json
