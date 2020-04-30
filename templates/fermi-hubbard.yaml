@@ -1,13 +1,13 @@
 spec:
   templates:
-  - name: get-exact-energy-density-for-1D-fermi-hubbard-model
+  - name: get-exact-energy-density-for-2D-fermi-hubbard-model
     parent: generic-task
     inputs:
       parameters:
       - name: tunneling-energy 
       - name: coulomb-interaction-energy
-      - name: length-of-chain 
-        default: None
+      - name: x-dimension 
+      - name: y-dimension 
       - name: magnetic-field
         default: 0
       - name: command
@@ -17,12 +17,13 @@ spec:
         path: /app/main_script.py
         raw:
           data: |
-            from zquantum.solid_state.fermi_hubbard import calculate_exact_density_of_energy_for_1D_fermi_hubbard
+            from zquantum.solid_state.fermi_hubbard import calculate_exact_density_of_energy_for_2_D_fermi_hubbard
             from zquantum.core.utils import ValueEstimate, save_value_estimate
-            energy_density = calculate_exact_density_of_energy_for_1D_fermi_hubbard(
+            energy_density = calculate_exact_density_of_energy_for_2_D_fermi_hubbard(
                                           tunneling_energy={{inputs.parameters.tunneling-energy}},
                                           coulomb_interaction_energy={{inputs.parameters.coulomb-interaction-energy}},
-                                          length_of_chain={{inputs.parameters.length-of-chain}},
+                                          x_dimension ={{inputs.parameters.x-dimension}},
+                                          y_dimension ={{inputs.parameters.y-dimension}},
                                           magnetic_field={{inputs.parameters.magnetic-field}})
             
             save_value_estimate(ValueEstimate(energy_density), "energy_density.json")
