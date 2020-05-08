@@ -25,7 +25,6 @@ class TestQAOA(unittest.TestCase):
         # Then
         self.assertAlmostEqual(energy_density, correct_energy_density, 5)
 
-        # Check if it gives the exact value
         # Given
         x_dimension = None
         y_dimension = 1
@@ -41,6 +40,23 @@ class TestQAOA(unittest.TestCase):
 
         # Then
         self.assertAlmostEqual(energy_density, correct_energy_density, 5)
+
+        # Given
+        x_dimension = 2
+        y_dimension = 2
+        magnetic_field = 0
+        correct_energy_density = -0.33005873956798837
+
+        # When
+        energy_density = calculate_exact_density_of_energy_for_2_D_fermi_hubbard(tunneling_energy, 
+                coulomb_interaction_energy, 
+                x_dimension, 
+                y_dimension, 
+                magnetic_field)
+
+        # Then
+        self.assertAlmostEqual(energy_density, correct_energy_density, 5)
+
 
     def test_calculate_exact_density_of_energy_for_infinite_1D_fermi_hubbard(self):
         # Given

@@ -170,137 +170,132 @@ def get_fermi_hubbard_ordering(x_dimension, y_dimension, qpu_x_dimension, qpu_y_
     """
     n_qubits = 2 * x_dimension * y_dimension
 
-    # if the system is one-dimensional, the order is just a range
-    if y_dimension == 1 or x_dimension == 1:
-        ordering = list(range(0, n_qubits))
+    ordering = []
+    # Horizontal with oblique sites
+    if ordering_type == 'sycamore-horizontal':
+        # compute how many rows of sites will be needed. 
+        # In the horizontal-oblique case, the use of the x dimension
+        # is maximized
+        n_rows = (x_dimension * y_dimension) // qpu_x_dimension
+        # The residue is the number of sites appearing in the last
+        # row, which will not be full
+        residue = (x_dimension * y_dimension) % qpu_x_dimension
+        if residue > 0:
+            n_rows += 1
+        # generates dimers row by row
+        for counter in range(initial_y, n_rows + initial_y):
+            # the shift is the number of qubits that have been already utilized
+            shift = 2 * (counter) * (qpu_x_dimension + initial_x)
+            # limit_x is the number of sites that will get assigned in this passing
+            if residue > 0 and counter == n_rows - 1:
+                limit_x = residue
+            else:
+                limit_x = qpu_x_dimension
+            # even rows are numbered from right to left
+            if (counter - initial_y) % 2 == 0:
+                for n in range(initial_x, limit_x + initial_x):
+                    # the first index in the tuple is the upper qubit
+                    # the second one is the bottom qubit.
+                    # Each row of sites requires two rows of qubits in the
+                    # oblique mapping.
+                    ordering.extend([shift + n,
+                                    n + (qpu_x_dimension + initial_x) + shift])
+            # odd rows are numbered from left to right
+            elif (counter - initial_y) % 2 == 1:
+                for n in reversed(range(initial_x, limit_x + initial_x)):
+                    ordering.extend([shift + n,
+                                    n + (qpu_x_dimension + initial_x) + shift])
+        # Computes the final size of the grid of qubits required to map all the 
+        # desired sites.
+        required_x = qpu_x_dimension + initial_x
+        required_y = 2 * (n_rows + initial_y)
 
-    else:
-        ordering = []
-        # Horizontal with oblique sites
-        if ordering_type == 'sycamore-horizontal':
-            # compute how many rows of sites will be needed. 
-            # In the horizontal-oblique case, the use of the x dimension
-            # is maximized
-            n_rows = (x_dimension * y_dimension) // qpu_x_dimension
-            # The residue is the number of sites appearing in the last
-            # row, which will not be full
-            residue = (x_dimension * y_dimension) % qpu_x_dimension
-            if residue > 0:
-                n_rows += 1
-            # generates dimers row by row
-            for counter in range(initial_y, n_rows + initial_y):
-                # the shift is the number of qubits that have been already utilized
-                shift = 2 * (counter) * (qpu_x_dimension + initial_x)
-                # limit_x is the number of sites that will get assigned in this passing
-                if residue > 0 and counter == n_rows - 1:
-                    limit_x = residue
-                else:
-                    limit_x = qpu_x_dimension
-                # even rows are numbered from right to left
-                if (counter - initial_y) % 2 == 0:
-                    for n in range(initial_x, limit_x + initial_x):
-                        # the first index in the tuple is the upper qubit
-                        # the second one is the bottom qubit.
-                        # Each row of sites requires two rows of qubits in the
-                        # oblique mapping.
-                        ordering.extend([shift + n,
-                                        n + (qpu_x_dimension + initial_x) + shift])
-                # odd rows are numbered from left to right
-                elif (counter - initial_y) % 2 == 1:
-                    for n in reversed(range(initial_x, limit_x + initial_x)):
-                        ordering.extend([shift + n,
-                                        n + (qpu_x_dimension + initial_x) + shift])
-            # Computes the final size of the grid of qubits required to map all the 
-            # desired sites.
-            required_x = qpu_x_dimension + initial_x
-            required_y = 2 * (n_rows + initial_y)
+    # Vertical with oblique sites
+    elif ordering_type == 'sycamore-vertical':
+        # Compute the number of columns of sites. For this mapping, we saturate the 
+        # y-dimension of the qpu
+        n_columns = (x_dimension * y_dimension) // (qpu_y_dimension // 2)
+        # The residue is the number of sites appearing in the last
+        # column, which will not be full
+        residue = (x_dimension * y_dimension) % (qpu_y_dimension // 2)
+        if residue > 0:
+            n_columns += 1
+        
+        for counter in range(initial_x, n_columns + initial_x):
+            # limit_y is the number of sites that will get assigned in this passing
+            if residue > 0 and counter == n_columns - 1:
+                limit_y = residue
+            else:
+                limit_y = qpu_y_dimension // 2
+            # even columns are numbered from top to bottom
+            if (counter - initial_x) % 2 == 0:
+                for n in range(initial_y, limit_y + initial_y):
+                    ordering.extend([(2 * n) * (qpu_x_dimension + initial_x) + counter,
+                                        (2 * n + 1) * (qpu_x_dimension + initial_x) + counter])
+            # odd columns are number from bottom to top
+            elif (counter - initial_x) % 2 == 1:
+                for n in reversed(range(initial_y, limit_y + initial_y)):
+                    ordering.extend([(2 * n) * (qpu_x_dimension + initial_x) + counter,
+                                        (2 * n + 1) * (qpu_x_dimension + initial_x) + counter])
 
-        # Vertical with oblique sites
-        elif ordering_type == 'sycamore-vertical':
-            # Compute the number of columns of sites. For this mapping, we saturate the 
-            # y-dimension of the qpu
-            n_columns = (x_dimension * y_dimension) // (qpu_y_dimension // 2)
-            # The residue is the number of sites appearing in the last
-            # column, which will not be full
-            residue = (x_dimension * y_dimension) % (qpu_y_dimension // 2)
-            if residue > 0:
-                n_columns += 1
-            
-            for counter in range(initial_x, n_columns + initial_x):
-                # limit_y is the number of sites that will get assigned in this passing
-                if residue > 0 and counter == n_columns - 1:
-                    limit_y = residue
-                else:
-                    limit_y = qpu_y_dimension // 2
-                # even columns are numbered from top to bottom
-                if (counter - initial_x) % 2 == 0:
-                    for n in range(initial_y, limit_y + initial_y):
-                        ordering.extend([(2 * n) * (qpu_x_dimension + initial_x) + counter,
-                                         (2 * n + 1) * (qpu_x_dimension + initial_x) + counter])
-                # odd columns are number from bottom to top
-                elif (counter - initial_x) % 2 == 1:
-                    for n in reversed(range(initial_y, limit_y + initial_y)):
-                        ordering.extend([(2 * n) * (qpu_x_dimension + initial_x) + counter,
-                                         (2 * n + 1) * (qpu_x_dimension + initial_x) + counter])
+        required_x = n_columns + initial_x
+        required_y = qpu_y_dimension + 2 * initial_y
 
-            required_x = n_columns + initial_x
-            required_y = qpu_y_dimension + 2 * initial_y
+    # Horizontal sites with interleaved ordering
+    elif ordering_type == 'sycamore-interleaved':
+        
+        # the number of sites that can be fitted into the x dimension of the qpu
+        half_effective_x = qpu_x_dimension // 2
+        x_residue = qpu_x_dimension % 2
+        # the number of sites that can be fitted in the y dimension of the qpu
+        effective_y = (2 * x_dimension * y_dimension) // (2 * half_effective_x)
+        y_residue = (2 * x_dimension * y_dimension) % (2 * half_effective_x)
 
-        # Horizontal sites with interleaved ordering
-        elif ordering_type == 'sycamore-interleaved':
-            
-            # the number of sites that can be fitted into the x dimension of the qpu
-            half_effective_x = qpu_x_dimension // 2
-            x_residue = qpu_x_dimension % 2
-            # the number of sites that can be fitted in the y dimension of the qpu
-            effective_y = (2 * x_dimension * y_dimension) // (2 * half_effective_x)
-            y_residue = (2 * x_dimension * y_dimension) % (2 * half_effective_x)
+        if y_residue > 0:
+            effective_y += 1
 
-            if y_residue > 0:
-                effective_y += 1
+        # number of qubits that would be needed for the requested fermi-hubbard dimension
+        required_x = 2 * (half_effective_x + initial_x)
+        required_y = effective_y + 2 * initial_y
 
-            # number of qubits that would be needed for the requested fermi-hubbard dimension
-            required_x = 2 * (half_effective_x + initial_x)
-            required_y = effective_y + 2 * initial_y
+        # In this ordering, the sites are assigned in two moments:
+        # First, we follow a horizontal mapping skipping one row of sites each pass
+        # until it reaches the maximum dimension of the qpu. Then, during the second moment,
+        # tt goes in a reversed horizontal through the rows of sites that were skipped in the first moment.
+        counter = -1
+        # First moment
+        for y in range(initial_y, effective_y + initial_y, 2):
+            counter += 1
+            if y_residue > 0 and counter == effective_y - 1:
+                limit_x = y_residue // 2
+            else:
+                limit_x = half_effective_x
+            # from right to left
+            if counter % 2 == 0:
+                x_range = range(initial_x, limit_x + initial_x)
+            # from left to right
+            else:
+                x_range = reversed(range(initial_x, limit_x + initial_x))
+            for x in x_range:
+                ordering.extend([y * qpu_x_dimension + 2 * x, y * qpu_x_dimension + 2 * x + 1])
+        # second moment
+        for y in reversed(range(initial_y + 1, effective_y + initial_y, 2)):
+            counter += 1
+            if y_residue > 0 and counter == effective_y - 1:
+                limit_x = y_residue // 2
+            else:
+                limit_x = half_effective_x
+            # from right to left
+            if counter % 2 == 0:
+                x_range = range(initial_x, limit_x + initial_x)
+            # from left to right
+            else:
+                x_range = reversed(range(initial_x, limit_x + initial_x))
+            for x in x_range:
+                ordering.extend([y * qpu_x_dimension + 2 * x, y * qpu_x_dimension + 2 * x + 1])
 
-            # In this ordering, the sites are assigned in two moments:
-            # First, we follow a horizontal mapping skipping one row of sites each pass
-            # until it reaches the maximum dimension of the qpu. Then, during the second moment,
-            # tt goes in a reversed horizontal through the rows of sites that were skipped in the first moment.
-            counter = -1
-            # First moment
-            for y in range(initial_y, effective_y + initial_y, 2):
-                counter += 1
-                if y_residue > 0 and counter == effective_y - 1:
-                    limit_x = y_residue // 2
-                else:
-                    limit_x = half_effective_x
-                # from right to left
-                if counter % 2 == 0:
-                    x_range = range(initial_x, limit_x + initial_x)
-                # from left to right
-                else:
-                    x_range = reversed(range(initial_x, limit_x + initial_x))
-                for x in x_range:
-                    ordering.extend([y * qpu_x_dimension + 2 * x, y * qpu_x_dimension + 2 * x + 1])
-            # second moment
-            for y in reversed(range(initial_y + 1, effective_y + initial_y, 2)):
-                counter += 1
-                if y_residue > 0 and counter == effective_y - 1:
-                    limit_x = y_residue // 2
-                else:
-                    limit_x = half_effective_x
-                # from right to left
-                if counter % 2 == 0:
-                    x_range = range(initial_x, limit_x + initial_x)
-                # from left to right
-                else:
-                    x_range = reversed(range(initial_x, limit_x + initial_x))
-                for x in x_range:
-                    ordering.extend([y * qpu_x_dimension + 2 * x, y * qpu_x_dimension + 2 * x + 1])
-
-        # check if the required size of the qpu is larger than the available size 
-        if required_x * required_y > (qpu_x_dimension + initial_x) * (qpu_y_dimension + 2 * initial_y):
-            raise Warning("The number of required qubits is larger than the available number of qubits using the {0} mapping".format(ordering_type))
+    # check if the required size of the qpu is larger than the available size 
+    if required_x * required_y > (qpu_x_dimension + initial_x) * (qpu_y_dimension + 2 * initial_y):
+        raise Warning("The number of required qubits is larger than the available number of qubits using the {0} mapping".format(ordering_type))
     
     return ordering
