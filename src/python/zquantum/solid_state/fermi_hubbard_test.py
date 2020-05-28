@@ -4,7 +4,7 @@ from .fermi_hubbard import (calculate_exact_density_of_energy_for_2_D_fermi_hubb
 
 from openfermion import FermionOperator, get_interaction_operator
 
-class TestQAOA(unittest.TestCase):
+class TestFermiHubbard(unittest.TestCase):
 
     def test_calculate_exact_density_of_energy_for_2_D_fermi_hubbard(self):
         # Given
