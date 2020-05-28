@@ -13,6 +13,7 @@ def calculate_exact_density_of_energy_for_2_D_fermi_hubbard(tunneling_energy,
                                                             magnetic_field=0):
     """
     Calculates the exact density of energy for 1D Fermi-Hubbard model of finite length.
+    It works only for a half-filling case.
 
     For the general case 
         Args:
@@ -39,8 +40,7 @@ def calculate_exact_density_of_energy_for_2_D_fermi_hubbard(tunneling_energy,
     # Get scipy.sparse.csc representation.
     sparse_operator = get_sparse_operator(hubbard_model)
 
-    #TODO: the "+ chemical_potential" doesn't work in general case.
-    #It works only for the case with electron per site.
+    #It works only for the case with one electron per site.
     energy_density = get_ground_state(sparse_operator)[0]/(x_dimension*y_dimension) + chemical_potential
     
     return energy_density
@@ -54,7 +54,7 @@ def calculate_exact_density_of_energy_for_infinite_1D_fermi_hubbard(tunneling_en
         Returns:
             (float): energy density
     """
-    #TODO: don't we need magnetic field as well?
+
     def integrand(x,t,u):
         return -4*t*scipy.special.jv(0,x)*scipy.special.jv(1,x)/(x*(1+np.exp(x*u/(2*t))))
 
