@@ -32,7 +32,7 @@ def calculate_and_save_exact_density_of_energy_for_2_D_fermi_hubbard(tunneling_e
                                                                              magnetic_field)
 
     val_estimate = ValueEstimate(energy_density)
-    save_value_estimate(val_estimate, 'value_estimate.json')
+    save_value_estimate(val_estimate, 'value-estimate.json')
 
 
 def build_and_save_fermi_hubbard_hamiltonian(x_dimension, y_dimension, tunneling, coulomb,
