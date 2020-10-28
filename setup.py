@@ -1,8 +1,7 @@
 import setuptools
 import os
 
-readme_path = os.path.join("..", "README.md")
-with open(readme_path, "r") as f:
+with open("README.md", "r") as f:
     long_description = f.read()
 
 setuptools.setup(
