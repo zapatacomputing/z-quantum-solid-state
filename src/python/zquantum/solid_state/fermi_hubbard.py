@@ -6,6 +6,10 @@ import scipy
 import numpy as np
 
 
+def compute_energy_density(energy, x_dimension, y_dimension, chemical_potential):
+    """Computes energy density from raw energy."""
+    return (energy/(x_dimension*y_dimension)) + chemical_potential
+
 def calculate_exact_density_of_energy_for_2_D_fermi_hubbard(tunneling_energy, 
                                                             coulomb_interaction_energy, 
                                                             x_dimension=None,
