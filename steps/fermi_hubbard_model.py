@@ -1,11 +1,18 @@
 
 from zquantum.solid_state.fermi_hubbard import (
+    compute_energy_density,
     calculate_exact_density_of_energy_for_2_D_fermi_hubbard,
     get_fermi_hubbard_hamiltonian
 )
 from zquantum.core.utils import ValueEstimate, save_value_estimate
 from qeopenfermion import save_interaction_operator
 
+
+def calculate_and_save_energy_density(energy, x_dimension, y_dimension, chemical_potential):
+    """Calculates and saves energy density from energy."""
+    energy_density = compute_energy_density(energy, x_dimension, y_dimension, chemical_potential)
+    val_estimate = ValueEstimate(energy_density)
+    save_value_estimate(val_estimate, 'value-estimate.json')
 
 def calculate_and_save_exact_density_of_energy_for_2_D_fermi_hubbard(tunneling_energy, 
                                                                     coulomb_interaction_energy, 
@@ -33,7 +40,6 @@ def calculate_and_save_exact_density_of_energy_for_2_D_fermi_hubbard(tunneling_e
 
     val_estimate = ValueEstimate(energy_density)
     save_value_estimate(val_estimate, 'value-estimate.json')
-
 
 def build_and_save_fermi_hubbard_hamiltonian(x_dimension, y_dimension, tunneling, coulomb,
                                              chemical_potential=0.0, magnetic_field=0.0, 
