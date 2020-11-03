@@ -3,6 +3,7 @@
 
 import numpy as np
 from zquantum.solid_state.fermi_hubbard import get_fermi_hubbard_hamiltonian
+from openfermion.transforms import jordan_wigner
 
 
 def get_1d_fhm_hamiltonian(fhm_model_specs_list, **kwargs):
@@ -36,6 +37,7 @@ def get_1d_fhm_hamiltonian(fhm_model_specs_list, **kwargs):
                                                     periodic=False, 
                                                     spinless=False,
                                                     particle_hole_symmetry=False)
+        hamiltonian = jordan_wigner(hamiltonian)
         hamiltonians.append(hamiltonian)
     return hamiltonians
 
