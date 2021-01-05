@@ -5,7 +5,7 @@ from zquantum.solid_state.fermi_hubbard import (
     get_fermi_hubbard_hamiltonian
 )
 from zquantum.core.utils import ValueEstimate, save_value_estimate
-from qeopenfermion import save_interaction_operator
+from zquantum.core.openfermion import save_interaction_operator
 
 
 def calculate_and_save_energy_density(energy, x_dimension, y_dimension, chemical_potential):
