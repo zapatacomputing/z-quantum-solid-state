@@ -15,7 +15,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/zapatacomputing/z-quantum-solid-state ",
     packages=setuptools.find_namespace_packages(include=["zquantum.*"]),
-    package_dir={"": "python"},
+    package_dir={"": "src/python"},
     classifiers=(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
