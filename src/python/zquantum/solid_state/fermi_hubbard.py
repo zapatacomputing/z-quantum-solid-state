@@ -5,20 +5,24 @@ import scipy.integrate as integrate
 import scipy
 import numpy as np
 
+
 def compute_energy_density(energy, x_dimension, y_dimension, chemical_potential):
     """Computes energy density from raw energy."""
-    return (energy/(x_dimension*y_dimension)) + chemical_potential
+    return (energy / (x_dimension * y_dimension)) + chemical_potential
+
 
 def compute_energy_from_density(density, x_dimension, y_dimension, chemical_potential):
     """Computes energy density from raw energy."""
-    return (x_dimension*y_dimension) * (density - chemical_potential)
+    return (x_dimension * y_dimension) * (density - chemical_potential)
+
 
 def calculate_ground_state_for_2_D_fermi_hubbard(
-        tunneling_energy, 
-        coulomb_interaction_energy, 
-        x_dimension=None,
-        y_dimension=1, 
-        magnetic_field=0):
+    tunneling_energy,
+    coulomb_interaction_energy,
+    x_dimension=None,
+    y_dimension=1,
+    magnetic_field=0,
+):
     """
     Calculates the exact density of energy for 1D Fermi-Hubbard model of finite length.
     It works only for a half-filling case.
@@ -33,28 +37,42 @@ def calculate_ground_state_for_2_D_fermi_hubbard(
         Returns:
             (float): energy density
     """
-    if x_dimension is None and y_dimension==1:
+    if x_dimension is None and y_dimension == 1:
         print("WARNING!")
-        print("Value of the magnetic field is not taken into account in calculation for infite 1D Fermi Hubbard model.")
-        return calculate_exact_density_of_energy_for_infinite_1D_fermi_hubbard(tunneling_energy, coulomb_interaction_energy)
+        print(
+            "Value of the magnetic field is not taken into account in calculation for infite 1D Fermi Hubbard model."
+        )
+        return calculate_exact_density_of_energy_for_infinite_1D_fermi_hubbard(
+            tunneling_energy, coulomb_interaction_energy
+        )
 
-    chemical_potential = coulomb_interaction_energy/2
+    chemical_potential = coulomb_interaction_energy / 2
     energy_data = []
 
     hubbard_model = fermi_hubbard(
-        x_dimension, y_dimension, tunneling_energy, coulomb_interaction_energy, chemical_potential,
-        magnetic_field, False, False)
+        x_dimension,
+        y_dimension,
+        tunneling_energy,
+        coulomb_interaction_energy,
+        chemical_potential,
+        magnetic_field,
+        False,
+        False,
+    )
 
     # Get scipy.sparse.csc representation.
     sparse_operator = get_sparse_operator(hubbard_model)
-    
+
     return get_ground_state(sparse_operator)[1]
 
-def calculate_exact_density_of_energy_for_2_D_fermi_hubbard(tunneling_energy, 
-                                                            coulomb_interaction_energy, 
-                                                            x_dimension=None,
-                                                            y_dimension=1, 
-                                                            magnetic_field=0):
+
+def calculate_exact_density_of_energy_for_2_D_fermi_hubbard(
+    tunneling_energy,
+    coulomb_interaction_energy,
+    x_dimension=None,
+    y_dimension=1,
+    magnetic_field=0,
+):
     """
     Calculates the exact density of energy for 1D Fermi-Hubbard model of finite length.
     It works only for a half-filling case.
