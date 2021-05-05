@@ -12,7 +12,7 @@ def compute_energy_density(energy, x_dimension, y_dimension, chemical_potential)
 
 
 def compute_energy_from_density(density, x_dimension, y_dimension, chemical_potential):
-    """Computes energy density from raw energy."""
+    """Computes energy from energy density."""
     return (x_dimension * y_dimension) * (density - chemical_potential)
 
 
