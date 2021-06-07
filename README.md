@@ -1,6 +1,6 @@
 # z-quantum-solid-state
 
-[![codecov](https://codecov.io/gh/zapatacomputing/z-quantum-solid-state/branch/master/graph/badge.svg?token=UPHNS662NE)](https://codecov.io/gh/zapatacomputing/z-quantum-solid-state)
+[![codecov](https://codecov.io/gh/zapatacomputing/z-quantum-solid-state/branch/master/graph/badge.svg?token=UPHNS662NE)](https://codecov.io/gh/zapatacomputing/z-quantum-solid-state) 
 
 ## What is it?
 
