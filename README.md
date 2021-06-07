@@ -1,5 +1,7 @@
 # z-quantum-solid-state
 
+[![codecov](https://codecov.io/gh/zapatacomputing/z-quantum-solid-state/branch/master/graph/badge.svg?token=UPHNS662NE)](https://codecov.io/gh/zapatacomputing/z-quantum-solid-state)
+
 ## What is it?
 
 `z-quantum-solid-state` is a module for solid state calculations to be used with [Orquestra](https://www.zapatacomputing.com/orquestra/) – platform for performing computations on quantum computers developed by [Zapata Computing](https://www.zapatacomputing.com).
