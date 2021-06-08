@@ -1,5 +1,5 @@
-from openfermion.transforms import jordan_wigner, get_interaction_operator
-from openfermion.linalg import get_sparse_operator, get_ground_state
+from openfermion import get_interaction_operator
+from openfermion import get_sparse_operator, get_ground_state
 from openfermion.hamiltonians import fermi_hubbard
 import scipy.integrate as integrate
 import scipy
@@ -27,7 +27,7 @@ def calculate_ground_state_for_2_D_fermi_hubbard(
     Calculates the exact density of energy for 1D Fermi-Hubbard model of finite length.
     It works only for a half-filling case.
 
-    For the general case 
+    For the general case
         Args:
             tunneling_energy (float): Tunneling energy
             coulomb_interaction_energy (float): Coulomb interaction energy.
