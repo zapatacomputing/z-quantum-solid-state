@@ -27,7 +27,7 @@ def _read_readme():
 
 setuptools.setup(
     name="z-quantum-solid-state",
-    version="0.1.0",
+    use_scm_version=True,
     author="Zapata Computing, Inc.",
     author_email="info@zapatacomputing.com",
     description="Library for solid state calculations for Orquestra.",
@@ -44,6 +44,7 @@ setuptools.setup(
         "Programming Language :: Python :: 3.7",
         "Operating System :: OS Independent",
     ],
+    setup_requires=["setuptools_scm~=6.0"],
     install_requires=["z-quantum-core"],
     extras_require=extras_require,
 )
