@@ -1,28 +1,15 @@
-import os
+import warnings
 
 import setuptools
 
-dev_requires = [
-    "pytest>=3.7.1",
-    "pytest-cov>=2.5.1",
-    "tox>=3.2.1",
-    "flake8>=3.7.9",
-    "black>=19.3b0",
-    "pre_commit>=2.10.1",
-]
+try:
+    from subtrees.z_quantum_actions.setup_extras import extras
+except ImportError:
+    warnings.warn("Unable to import extras")
+    extras = {}
 
-extras_require = {
-    "dev": dev_requires,
-}
-
-
-def _this_path():
-    return os.path.abspath(os.path.dirname(__file__))
-
-
-def _read_readme():
-    with open(os.path.join(_this_path(), "README.md")) as f:
-        return f.read()
+with open("README.md", "r") as f:
+    long_description = f.read()
 
 
 setuptools.setup(
@@ -32,7 +19,7 @@ setuptools.setup(
     author_email="info@zapatacomputing.com",
     description="Library for solid state calculations for Orquestra.",
     license="Apache-2.0",
-    long_description=_read_readme(),
+    long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/zapatacomputing/z-quantum-core",
     packages=setuptools.find_namespace_packages(
@@ -46,5 +33,5 @@ setuptools.setup(
     ],
     setup_requires=["setuptools_scm~=6.0"],
     install_requires=["z-quantum-core"],
-    extras_require=extras_require,
+    extras_require=extras,
 )

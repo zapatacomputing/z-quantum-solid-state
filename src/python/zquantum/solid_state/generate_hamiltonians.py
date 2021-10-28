@@ -1,8 +1,8 @@
 """Module to generate 1D FHM Hamiltonians at half-filling."""
 
 import numpy as np
-from zquantum.solid_state.fermi_hubbard import get_fermi_hubbard_hamiltonian
 from openfermion.transforms import jordan_wigner
+from zquantum.solid_state.fermi_hubbard import get_fermi_hubbard_hamiltonian
 
 
 def get_1d_fhm_hamiltonian(fhm_model_specs_list, **kwargs):
@@ -10,17 +10,18 @@ def get_1d_fhm_hamiltonian(fhm_model_specs_list, **kwargs):
     dictionary specifying a problem/Hamiltonian.
 
     Notes:
-        Assumes t=1 (kinetic energy) and assumes half-filling (i.e. chemical potential = U/2).
+        Assumes t=1 (kinetic energy) and assumes half-filling
+        (i.e. chemical potential = U/2).
 
     Args:
-        fhm_model_specs (list[Dict]): List of pecifications for the 1D FHM problem. 
+        fhm_model_specs (list[Dict]): List of pecifications for the 1D FHM problem.
                                         Each dictionary should contain
                                         keys 'n_sites', 'n_sites'
                                         where:
                                         U is the potential energy
                                         n_sites is the number of lattice sites
     Returns:
-        List of zquantum.core.qubitoperator.QubitOperator object describing the 
+        List of zquantum.core.qubitoperator.QubitOperator object describing the
         1D FHM Hamiltonians at half-filling
     """
     hamiltonians = []

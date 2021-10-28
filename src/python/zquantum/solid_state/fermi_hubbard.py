@@ -1,9 +1,8 @@
-from openfermion import get_interaction_operator
-from openfermion import get_sparse_operator, get_ground_state
-from openfermion.hamiltonians import fermi_hubbard
-import scipy.integrate as integrate
-import scipy
 import numpy as np
+import scipy
+import scipy.integrate as integrate
+from openfermion import get_ground_state, get_interaction_operator, get_sparse_operator
+from openfermion.hamiltonians import fermi_hubbard
 
 
 def compute_energy_density(energy, x_dimension, y_dimension, chemical_potential):
@@ -40,14 +39,14 @@ def calculate_ground_state_for_2_D_fermi_hubbard(
     if x_dimension is None and y_dimension == 1:
         print("WARNING!")
         print(
-            "Value of the magnetic field is not taken into account in calculation for infite 1D Fermi Hubbard model."
+            "Value of the magnetic field is not taken into account in calculation for "
+            "infite 1D Fermi Hubbard model."
         )
         return calculate_exact_density_of_energy_for_infinite_1D_fermi_hubbard(
             tunneling_energy, coulomb_interaction_energy
         )
 
     chemical_potential = coulomb_interaction_energy / 2
-    energy_data = []
 
     hubbard_model = fermi_hubbard(
         x_dimension,
@@ -90,14 +89,14 @@ def calculate_exact_density_of_energy_for_2_D_fermi_hubbard(
     if x_dimension is None and y_dimension == 1:
         print("WARNING!")
         print(
-            "Value of the magnetic field is not taken into account in calculation for infite 1D Fermi Hubbard model."
+            "Value of the magnetic field is not taken into account in calculation for "
+            "infite 1D Fermi Hubbard model."
         )
         return calculate_exact_density_of_energy_for_infinite_1D_fermi_hubbard(
             tunneling_energy, coulomb_interaction_energy
         )
 
     chemical_potential = coulomb_interaction_energy / 2
-    energy_data = []
 
     hubbard_model = fermi_hubbard(
         x_dimension,
@@ -198,7 +197,7 @@ def get_fermi_hubbard_hamiltonian(
             \sum_{i} (a^{\dagger}_{i,up} a_{i,up} - 1/2) (a^{\dagger}_{i,down}a_{i,down} - 1/2)
     Returns:
 
-    """
+    """  # noqa: E501 W605
     hamiltonian = fermi_hubbard(
         x_dimension,
         y_dimension,
@@ -279,7 +278,7 @@ def get_fermi_hubbard_ordering(
     Return:
         ordering (list)
     """
-    n_qubits = 2 * x_dimension * y_dimension
+    # n_qubits = 2 * x_dimension * y_dimension
 
     ordering = []
     # Horizontal with oblique sites
@@ -367,7 +366,7 @@ def get_fermi_hubbard_ordering(
 
         # the number of sites that can be fitted into the x dimension of the qpu
         half_effective_x = qpu_x_dimension // 2
-        x_residue = qpu_x_dimension % 2
+        # x_residue = qpu_x_dimension % 2
         # the number of sites that can be fitted in the y dimension of the qpu
         effective_y = (2 * x_dimension * y_dimension) // (2 * half_effective_x)
         y_residue = (2 * x_dimension * y_dimension) % (2 * half_effective_x)
@@ -375,14 +374,16 @@ def get_fermi_hubbard_ordering(
         if y_residue > 0:
             effective_y += 1
 
-        # number of qubits that would be needed for the requested fermi-hubbard dimension
+        # number of qubits that would be needed for the requested fermi-hubbard
+        # dimension
         required_x = 2 * (half_effective_x + initial_x)
         required_y = effective_y + 2 * initial_y
 
         # In this ordering, the sites are assigned in two moments:
         # First, we follow a horizontal mapping skipping one row of sites each pass
-        # until it reaches the maximum dimension of the qpu. Then, during the second moment,
-        # tt goes in a reversed horizontal through the rows of sites that were skipped in the first moment.
+        # until it reaches the maximum dimension of the qpu. Then, during the second
+        # moment, tt goes in a reversed horizontal through the rows of sites that were
+        # skipped in the first moment.
         counter = -1
         # First moment
         for y in range(initial_y, effective_y + initial_y, 2):
@@ -424,9 +425,8 @@ def get_fermi_hubbard_ordering(
         qpu_y_dimension + 2 * initial_y
     ):
         raise Warning(
-            "The number of required qubits is larger than the available number of qubits using the {0} mapping".format(
-                ordering_type
-            )
+            "The number of required qubits is larger than the available number of "
+            "qubits using the {0} mapping".format(ordering_type)
         )
 
     return ordering

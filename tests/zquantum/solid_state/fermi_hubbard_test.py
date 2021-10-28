@@ -1,12 +1,12 @@
 import unittest
+
+from openfermion import FermionOperator, get_interaction_operator
 from zquantum.solid_state.fermi_hubbard import (
     calculate_exact_density_of_energy_for_2_D_fermi_hubbard,
     calculate_exact_density_of_energy_for_infinite_1D_fermi_hubbard,
     get_fermi_hubbard_hamiltonian,
     get_fermi_hubbard_ordering,
 )
-
-from openfermion import FermionOperator, get_interaction_operator
 
 
 class TestFermiHubbard(unittest.TestCase):
