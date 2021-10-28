@@ -1,6 +1,6 @@
 # z-quantum-solid-state
 
-[![codecov](https://codecov.io/gh/zapatacomputing/z-quantum-solid-state/branch/master/graph/badge.svg?token=UPHNS662NE)](https://codecov.io/gh/zapatacomputing/z-quantum-solid-state) 
+[![codecov](https://codecov.io/gh/zapatacomputing/z-quantum-solid-state/branch/main/graph/badge.svg?token=UPHNS662NE)](https://codecov.io/gh/zapatacomputing/z-quantum-solid-state) 
 
 ## What is it?
 
@@ -18,7 +18,7 @@ resources:
   type: git
   parameters:
     url: "git@github.com:zapatacomputing/z-quantum-solid-state.git"
-    branch: "master"
+    branch: "main"
 ```
 
 and then import in a specific step:
