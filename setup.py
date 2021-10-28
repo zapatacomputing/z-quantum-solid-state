@@ -19,7 +19,7 @@ setuptools.setup(
     author_email="info@zapatacomputing.com",
     description="Library for solid state calculations for Orquestra.",
     license="Apache-2.0",
-    long_description=long_description(),
+    long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/zapatacomputing/z-quantum-core",
     packages=setuptools.find_namespace_packages(
