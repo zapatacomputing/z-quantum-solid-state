@@ -1,9 +1,8 @@
-from openfermion import get_interaction_operator
-from openfermion import get_sparse_operator, get_ground_state
-from openfermion.hamiltonians import fermi_hubbard
-import scipy.integrate as integrate
-import scipy
 import numpy as np
+import scipy
+import scipy.integrate as integrate
+from openfermion import get_ground_state, get_interaction_operator, get_sparse_operator
+from openfermion.hamiltonians import fermi_hubbard
 
 
 def compute_energy_density(energy, x_dimension, y_dimension, chemical_potential):

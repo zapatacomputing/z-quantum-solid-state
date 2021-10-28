@@ -1,11 +1,12 @@
+from typing import Optional
+
+from zquantum.core.openfermion import save_interaction_operator
+from zquantum.core.utils import ValueEstimate, save_value_estimate
 from zquantum.solid_state.fermi_hubbard import (
-    compute_energy_density,
     calculate_exact_density_of_energy_for_2_D_fermi_hubbard,
+    compute_energy_density,
     get_fermi_hubbard_hamiltonian,
 )
-from zquantum.core.utils import ValueEstimate, save_value_estimate
-from zquantum.core.openfermion import save_interaction_operator
-from typing import Optional
 
 
 def calculate_and_save_energy_density(
