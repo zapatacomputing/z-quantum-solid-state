@@ -1,8 +1,8 @@
 import numpy as np
 import scipy
 import scipy.integrate as integrate
-from openfermion import get_ground_state, get_interaction_operator, get_sparse_operator
-from openfermion.hamiltonians import fermi_hubbard
+from zquantum.core.openfermion import get_ground_state, get_interaction_operator, get_sparse_operator
+from zquantum.core.openfermion.hamiltonians import fermi_hubbard
 
 
 def compute_energy_density(energy, x_dimension, y_dimension, chemical_potential):

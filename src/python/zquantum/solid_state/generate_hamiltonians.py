@@ -1,7 +1,7 @@
 """Module to generate 1D FHM Hamiltonians at half-filling."""
 
 import numpy as np
-from openfermion.transforms import jordan_wigner
+from zquantum.core.openfermion.transforms import jordan_wigner
 from zquantum.solid_state.fermi_hubbard import get_fermi_hubbard_hamiltonian
 
 
