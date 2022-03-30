@@ -1,7 +1,11 @@
 import numpy as np
 import scipy
 import scipy.integrate as integrate
-from zquantum.core.openfermion import get_ground_state, get_interaction_operator, get_sparse_operator
+from zquantum.core.openfermion import (
+    get_ground_state,
+    get_interaction_operator,
+    get_sparse_operator,
+)
 from zquantum.core.openfermion.hamiltonians import fermi_hubbard
 
 
