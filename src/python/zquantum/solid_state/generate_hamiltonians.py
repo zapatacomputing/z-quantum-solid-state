@@ -1,3 +1,6 @@
+################################################################################
+# © Copyright 2020-2022 Zapata Computing Inc.
+################################################################################
 """Module to generate 1D FHM Hamiltonians at half-filling."""
 
 import numpy as np

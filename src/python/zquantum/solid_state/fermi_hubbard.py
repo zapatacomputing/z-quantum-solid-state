@@ -1,3 +1,6 @@
+################################################################################
+# © Copyright 2020-2022 Zapata Computing Inc.
+################################################################################
 import numpy as np
 import scipy
 import scipy.integrate as integrate

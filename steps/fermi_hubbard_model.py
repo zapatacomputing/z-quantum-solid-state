@@ -1,3 +1,6 @@
+################################################################################
+# © Copyright 2020-2021 Zapata Computing Inc.
+################################################################################
 from typing import Optional
 
 from zquantum.core.openfermion import save_interaction_operator
